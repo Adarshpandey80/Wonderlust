@@ -1,0 +1,23 @@
+# Wonderlust
+
+**Wonderlust** is a global rental platform that allows users to find and rent houses for short or long stays, anywhere in the world. Whether you're traveling for business, vacation, or remote work, Wonderlust helps connect people with unique places to stay, tailored to their needs.
+
+## 🛠️ Technologies Used
+
+### Backend:
+- **Node.js** – JavaScript runtime environment.
+- **Express.js** – Web application framework for building APIs.
+
+### Frontend:
+- **HTML**
+- **CSS**
+- **JavaScript**
+
+### Database:
+- **MongoDB** – NoSQL database for storing user and service data.
+
+### Other Tools & Integrations:
+- **Cloudinary** – Image storage and delivery.
+
+
+
