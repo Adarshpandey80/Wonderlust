@@ -38,6 +38,7 @@ main ()
 })
 .catch((err)=>{
     console.log(err);
+    console.log("error connecting to db");
 })
 
 async function main (){
