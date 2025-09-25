@@ -8,6 +8,7 @@ if( process.env.NODE_ENV != "production"){
 const express = require("express");
 const { saveRedirectUrl } = require("./middleware.js"); // Add this line to import the middleware
 const app = express();
+const port = process.env.PORT
 const mongoose = require("mongoose");
 
 const path= require("path");
@@ -28,7 +29,7 @@ const listingRouter = require("./routes/listing.js")
 const reviewRouter = require("./routes/review.js");
 const userRouter = require("./routes/user.js");
 
-const MONGO_URL = "mongodb://127.0.0.1:27017/dburl";
+// const MONGO_URL = "mongodb://127.0.0.1:27017/wonderlust";
 
 const dburl = process.env.ATLASDB_URL;
 
@@ -42,7 +43,7 @@ main ()
 })
 
 async function main (){
-    await mongoose.connect(MONGO_URL)
+    await mongoose.connect(dburl)
 }
 
 app.set("view engine" ,"ejs");
@@ -158,6 +159,6 @@ app.use((err,req,res,next)=>{
     // res.status(statusCode).send(message)
 })
  
-app.listen(8080,()=>{
+app.listen(port,()=>{
     console.log("app is listen on port 8080")
 })
