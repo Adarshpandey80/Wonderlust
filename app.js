@@ -29,7 +29,7 @@ const listingRouter = require("./routes/listing.js")
 const reviewRouter = require("./routes/review.js");
 const userRouter = require("./routes/user.js");
 
-// const MONGO_URL = "mongodb://127.0.0.1:27017/wonderlust";
+// const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
 
 const dburl = process.env.ATLASDB_URL;
 
@@ -132,6 +132,10 @@ app.use((req,res, next)=>{
 })
 
 
+
+app.get("/", (req, res) => {
+    res.redirect("/listings");
+});
 
 app.use("/listings" , listingRouter);
 
