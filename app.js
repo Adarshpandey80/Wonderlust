@@ -165,6 +165,7 @@ app.use((err,req,res,next)=>{
     // res.status(statusCode).send(message)
 })
  
-app.listen(port,()=>{
-    console.log("app is listen on port 8080")
-})
+app.listen(port, async () => {
+    console.log("app is listen on port 8080");
+    await main(); // Ensure database connection before handling requests
+});
