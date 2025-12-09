@@ -38,7 +38,6 @@ async function main() {
         await mongoose.connect(dburl , {
             serverSelectionTimeoutMS: 3000,
             socketTimeoutMS: 45000,
-            bufferCommands: false,
             bufferMaxEntries: 0
         });
         console.log("Connected to DB");
