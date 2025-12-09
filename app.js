@@ -1,4 +1,4 @@
-if( process.env.NODE_ENV != "production"){
+if (process.env.NODE_ENV != "production") {
     require('dotenv').config();
 }
 
@@ -11,9 +11,9 @@ const app = express();
 const port = process.env.PORT
 const mongoose = require("mongoose");
 
-const path= require("path");
+const path = require("path");
 const methodOverride = require("method-override");
-const ejsMeta= require("ejs-mate")
+const ejsMeta = require("ejs-mate")
 
 const ExpressError = require("./utlis/ExpressError.js");
 const session = require("express-session");
@@ -35,10 +35,10 @@ const dburl = process.env.ATLASDB_URL;
 
 async function main() {
     try {
-        await mongoose.connect(dburl , {
-            serverSelectionTimeoutMS: 3000,
-            socketTimeoutMS: 45000,
-            bufferMaxEntries: 0
+        await mongoose.connect(dburl, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+            serverSelectionTimeoutMS: 10000,
         });
         console.log("Connected to DB");
     } catch (err) {
@@ -47,12 +47,12 @@ async function main() {
     }
 }
 
-app.set("view engine" ,"ejs");
-app.set("views" , path.join(__dirname , "views"))
-app.use(express.urlencoded({extended : true}))
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"))
+app.use(express.urlencoded({ extended: true }))
 app.use(methodOverride("_method"));
 app.engine("ejs", ejsMeta);
-app.use(express.static(path.join(__dirname,"/public")));
+app.use(express.static(path.join(__dirname, "/public")));
 
 
 // const store = MongoStore.create({
@@ -68,23 +68,23 @@ app.use(express.static(path.join(__dirname,"/public")));
 // })
 
 
-const sessionOptions ={
+const sessionOptions = {
     // store,
-    secret : process.env.SECRET,
-    resave : false,
-    saveUninitialized : false,
-   cookie:{
-    expires: Date.now() + 7*24 *60*60 *1000,
-    maxAge: 7*24 *60*60 *1000,
-    httpOnly: true
-   },
+    secret: process.env.SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+        httpOnly: true
+    },
 
 };
 
 // app.get("/",(req,res)=>{
 //     res.send("hi im root");
 // })
- 
+
 
 
 // Test route to verify user creation and authentication
@@ -125,7 +125,7 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 
-app.use((req,res, next)=>{
+app.use((req, res, next) => {
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
     res.locals.currUser = req.user;
@@ -138,7 +138,7 @@ app.get("/", (req, res) => {
     res.redirect("/listings");
 });
 
-app.use("/listings" , listingRouter);
+app.use("/listings", listingRouter);
 
 
 app.use("/listings/:id/reviews", reviewRouter);
@@ -153,18 +153,21 @@ app.use("/", userRouter);
 
 
 
-app.all("*", (req,res ,next)=>{
+app.all("*", (req, res, next) => {
     console.log(`Request received: ${req.method} ${req.originalUrl}`); // Log incoming requests
     next(new ExpressError(404, "page not found"));
 })
 
-app.use((err,req,res,next)=>{
-    let {statusCode = 500, message = "something went wrong"} = err;
-    res.status(statusCode).render("error.ejs",{message})
+app.use((err, req, res, next) => {
+    let { statusCode = 500, message = "something went wrong" } = err;
+    res.status(statusCode).render("error.ejs", { message })
     // res.status(statusCode).send(message)
 })
- 
-app.listen(port, async () => {
-    console.log("app is listen on port 8080");
-    await main(); // Ensure database connection before handling requests
+
+
+
+main().then(() => {
+    app.listen(port, () => {
+        console.log("🚀 Server running on port 8080");
+    });
 });
